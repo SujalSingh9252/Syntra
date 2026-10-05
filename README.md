@@ -34,6 +34,62 @@ The backend processes and stores monitoring data in **PostgreSQL**, broadcasts l
 
 ---
 
+## 🎯 Problem Statement
+
+Modern development and IT environments often involve multiple systems, services, and Docker containers running simultaneously. Monitoring these resources manually can make it difficult to identify performance issues, resource spikes, and system availability problems in real time.
+
+Traditional monitoring approaches may also require checking multiple systems or tools separately, making centralized visibility and quick issue detection more challenging.
+
+**Syntra addresses this problem by providing a centralized, real-time monitoring platform that collects host and Docker container metrics through lightweight monitoring agents and presents them through an interactive dashboard.**
+
+The platform enables users to:
+
+* Monitor CPU, memory, and system uptime
+* Track Docker container performance
+* Identify online and offline systems
+* Detect threshold-based resource alerts
+* View real-time and historical metrics
+* Monitor multiple systems from a centralized dashboard
+
+---
+
+## 💡 Why Syntra?
+
+Syntra was designed to explore how a distributed monitoring system can combine **agent-based metric collection, REST APIs, real-time communication, persistent storage, and an interactive frontend** into a single full-stack platform.
+
+Instead of building only a dashboard or a standalone monitoring script, Syntra connects the complete workflow:
+
+```text
+System / Docker Containers
+          ↓
+   Monitoring Agent
+          ↓
+       REST API
+          ↓
+   Express Backend
+          ↓
+      PostgreSQL
+          ↓
+      Socket.IO
+          ↓
+    React Dashboard
+```
+
+This approach demonstrates practical implementation of:
+
+* 🔹 Full-Stack Development
+* 🔹 Distributed and Agent-Based Architecture
+* 🔹 REST API Development
+* 🔹 Real-Time Web Communication
+* 🔹 Database Design and Persistence
+* 🔹 Docker and Container Monitoring
+* 🔹 Infrastructure Observability
+* 🔹 Data Visualization
+
+The goal of Syntra is to provide a practical and extensible foundation for understanding and implementing real-time infrastructure monitoring systems.
+
+---
+
 ## ✨ Key Features
 
 ### 🖥️ Host System Monitoring
@@ -113,38 +169,38 @@ This supports:
                          │ • Docker Metrics    │
                          └──────────┬──────────┘
                                     │
-                              REST API
+                                 REST API
                                     │
                                     ▼
-                    ┌───────────────────────────┐
-                    │     Express Backend       │
-                    │                           │
-                    │ • Metric Processing       │
-                    │ • Alert Detection         │
-                    │ • System Management       │
-                    └─────────────┬─────────────┘
-                                  │
-                    ┌─────────────┴─────────────┐
-                    │                           │
-                    ▼                           ▼
-          ┌──────────────────┐       ┌──────────────────┐
-          │   PostgreSQL     │       │    Socket.IO     │
-          │                  │       │                  │
-          │ Persistent Data  │       │ Real-Time Events │
-          └────────┬─────────┘       └────────┬─────────┘
-                   │                          │
-                   └────────────┬─────────────┘
-                                │
-                                ▼
-                    ┌───────────────────────────┐
-                    │      React Dashboard      │
-                    │                           │
-                    │ • Live Metrics            │
-                    │ • System Status           │
-                    │ • Docker Monitoring       │
-                    │ • Historical Charts       │
-                    │ • Alerts                  │
-                    └───────────────────────────┘
+                      ┌───────────────────────────┐
+                      │     Express Backend       │
+                      │                           │
+                      │ • Metric Processing       │
+                      │ • Alert Detection         │
+                      │ • System Management       │
+                      └─────────────┬─────────────┘
+                                    │
+                     ┌──────────────┴──────────────┐
+                     │                             │
+                     ▼                             ▼
+           ┌──────────────────┐          ┌──────────────────┐
+           │   PostgreSQL     │          │    Socket.IO     │
+           │                  │          │                  │
+           │ Persistent Data  │          │ Real-Time Events │
+           └────────┬─────────┘          └────────┬─────────┘
+                    │                             │
+                    └──────────────┬──────────────┘
+                                   │
+                                   ▼
+                      ┌───────────────────────────┐
+                      │      React Dashboard      │
+                      │                           │
+                      │ • Live Metrics            │
+                      │ • System Status           │
+                      │ • Docker Monitoring       │
+                      │ • Historical Charts       │
+                      │ • Alerts                  │
+                      └───────────────────────────┘
 ```
 
 ---
@@ -283,7 +339,6 @@ Syntra
 ├── 📁 agent
 │   │
 │   ├── index.js
-│   ├── main.js
 │   ├── package.json
 │   └── .env.example
 │
@@ -455,13 +510,13 @@ npm run dev
 
 The agent will begin collecting system and Docker metrics and sending them to the backend.
 
-> **Note:** The monitoring agent is designed to run on the system being monitored, while the backend and dashboard provide centralized monitoring.
+> **Note:** The monitoring agent is designed to run separately on each system being monitored, while the backend and dashboard provide centralized monitoring.
 
 ---
 
 # 🐳 Docker Deployment
 
-Syntra includes Docker configuration for running the core application services in containers.
+Syntra includes Docker configuration for running the **core application services** in containers.
 
 From the project root:
 
@@ -481,7 +536,21 @@ To stop the services:
 docker compose down
 ```
 
-> The monitoring agent can be run separately on the system that needs to be monitored.
+### Docker Architecture
+
+Docker Compose starts the following core services:
+
+```text
+Docker Compose
+│
+├── PostgreSQL
+├── Backend
+└── Frontend
+```
+
+The **monitoring agent is not started by Docker Compose**. It is designed to run separately on each monitored machine so that it can collect that machine's host and Docker metrics.
+
+> **Important:** The monitoring agent should be configured with the backend URL of the Syntra instance it needs to report metrics to.
 
 ---
 
@@ -510,6 +579,8 @@ docker compose down
 Create `.env` files using the provided `.env.example` files.
 
 Keep environment-specific credentials and configuration values outside the repository.
+
+### Backend
 
 Example:
 
@@ -649,6 +720,7 @@ This project is developed for educational, learning, experimentation, and portfo
 **Syntra — Monitor. Observe. Analyze. React. ⚡**
 
 </div>
+
 
 
 
