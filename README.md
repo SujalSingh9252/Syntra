@@ -26,11 +26,11 @@
 
 **Syntra** is a distributed, real-time observability and monitoring platform designed to monitor **host systems** and **Docker containers** from a centralized dashboard.
 
-The platform follows an **agent-based architecture**, where a lightweight monitoring agent runs on each system, collects system and container metrics, and sends them to a centralized backend.
+The platform follows an **agent-based architecture**, where a lightweight monitoring agent runs on each monitored system, collects system and container metrics, and sends them to a centralized backend.
 
-The backend processes and stores monitoring data in **PostgreSQL**, broadcasts live updates through **Socket.IO**, and powers an interactive **React dashboard** for real-time visualization and analysis.
+The backend processes and stores monitoring data in **PostgreSQL**, broadcasts live updates through **Socket.IO**, and powers an interactive **React dashboard** for real-time visualization and monitoring.
 
-> Syntra provides a foundation for building scalable infrastructure monitoring and observability systems.
+> Syntra provides a practical foundation for building infrastructure monitoring and observability systems.
 
 ---
 
@@ -59,13 +59,14 @@ Track Docker containers running on monitored systems:
 
 ---
 
-### 🚨 Intelligent Alerts
+### 🚨 Threshold-Based Alerts
 
-Stay informed when system resources exceed defined thresholds:
+Syntra monitors resource usage and generates alerts when configured thresholds are exceeded.
 
 * 🔴 High CPU Usage Alerts
 * 🟠 High Memory Usage Alerts
 * ⚙️ Threshold-Based Monitoring
+* 🔄 Alert Resolution when conditions return to normal
 
 ---
 
@@ -73,27 +74,27 @@ Stay informed when system resources exceed defined thresholds:
 
 Syntra uses **Socket.IO** to deliver live monitoring updates.
 
-* ⚡ Instant Metric Updates
-* 🔄 Real-Time Dashboard Synchronization
-* 📊 Live System Monitoring
-* 🌐 Multi-System Support
+* ⚡ Real-Time Metric Updates
+* 🔄 Live Dashboard Synchronization
+* 📊 Continuous System Monitoring
+* 🌐 Multi-System Monitoring
 
 ---
 
 ### 💾 Persistent Metrics Storage
 
-Monitoring data is stored using **PostgreSQL**.
+Monitoring data is stored using **PostgreSQL**, allowing the platform to maintain historical infrastructure metrics.
 
-This enables:
+This supports:
 
 * Historical Metric Analysis
-* System Monitoring Records
-* Persistent Infrastructure Data
-* Future Analytics & Reporting
+* Persistent Monitoring Records
+* System Performance Tracking
+* Future Analytics and Reporting
 
 ---
 
-## 🏗️ System Architecture
+# 🏗️ System Architecture
 
 ```text
                          ┌─────────────────────┐
@@ -104,7 +105,7 @@ This enables:
                                     │
                                     ▼
                          ┌─────────────────────┐
-                         │ Lightweight Agent   │
+                         │  Monitoring Agent   │
                          │                     │
                          │ • CPU               │
                          │ • Memory            │
@@ -118,7 +119,7 @@ This enables:
                     ┌───────────────────────────┐
                     │     Express Backend       │
                     │                           │
-                    │ • Process Metrics         │
+                    │ • Metric Processing       │
                     │ • Alert Detection         │
                     │ • System Management       │
                     └─────────────┬─────────────┘
@@ -148,7 +149,7 @@ This enables:
 
 ---
 
-## 🔄 How Syntra Works
+# 🔄 How Syntra Works
 
 ### 1️⃣ Monitoring Agent
 
@@ -174,7 +175,7 @@ Docker Metrics
 
 ### 2️⃣ Metrics Collection
 
-The agent continuously collects system and Docker metrics using:
+The monitoring agent collects system and Docker metrics using:
 
 * `systeminformation`
 * `dockerode`
@@ -197,7 +198,7 @@ The backend is responsible for:
 
 ### 4️⃣ Data Storage
 
-Metrics are persisted in **PostgreSQL** for historical monitoring and future analysis.
+Monitoring metrics are persisted in **PostgreSQL** for historical monitoring and analysis.
 
 ---
 
@@ -215,7 +216,7 @@ This allows connected dashboards to receive updates without continuously polling
 
 ### 6️⃣ Monitoring Dashboard
 
-The React dashboard provides a centralized view of the infrastructure.
+The React dashboard provides a centralized view of monitored infrastructure.
 
 Users can monitor:
 
@@ -326,7 +327,7 @@ Syntra
 
 ## Prerequisites
 
-Make sure you have the following installed:
+Make sure the following are installed:
 
 * Node.js
 * npm
@@ -334,7 +335,7 @@ Make sure you have the following installed:
 * Docker
 * Docker Compose
 
-Check your installations:
+Verify the installations:
 
 ```bash
 node --version
@@ -352,7 +353,7 @@ docker --version
 git clone https://github.com/SujalSingh9252/Syntra.git
 ```
 
-Move into the project:
+Move into the project directory:
 
 ```bash
 cd Syntra
@@ -362,7 +363,7 @@ cd Syntra
 
 # 🗄️ Backend Setup
 
-Navigate to the backend directory:
+Navigate to the backend:
 
 ```bash
 cd backend
@@ -374,17 +375,17 @@ Install dependencies:
 npm install
 ```
 
-Create your environment file:
+Create the environment file:
 
 ```bash
 copy .env.example .env
 ```
 
-Configure your database credentials inside `.env`.
+Configure the required database connection inside `.env`.
 
-Initialize the PostgreSQL database using:
+Initialize the database using the provided:
 
-```bash
+```text
 schema.sql
 ```
 
@@ -398,7 +399,7 @@ npm run dev
 
 # 🎨 Frontend Setup
 
-Navigate to the frontend directory:
+Open a new terminal and navigate to:
 
 ```bash
 cd frontend
@@ -426,7 +427,7 @@ http://localhost:5173
 
 # 📡 Monitoring Agent Setup
 
-Navigate to the agent directory:
+Open another terminal and navigate to:
 
 ```bash
 cd agent
@@ -438,25 +439,29 @@ Install dependencies:
 npm install
 ```
 
-Create your environment file:
+Create the environment file:
 
 ```bash
 copy .env.example .env
 ```
 
+Configure the backend URL and monitoring-agent settings in `.env`.
+
 Start the monitoring agent:
 
 ```bash
-node main.js
+npm run dev
 ```
 
-The agent will begin collecting and sending system metrics to the backend.
+The agent will begin collecting system and Docker metrics and sending them to the backend.
+
+> **Note:** The monitoring agent is designed to run on the system being monitored, while the backend and dashboard provide centralized monitoring.
 
 ---
 
 # 🐳 Docker Deployment
 
-Syntra includes Docker configuration for containerized deployment.
+Syntra includes Docker configuration for running the core application services in containers.
 
 From the project root:
 
@@ -464,17 +469,19 @@ From the project root:
 docker compose up --build
 ```
 
-To run containers in detached mode:
+To run the services in detached mode:
 
 ```bash
 docker compose up -d
 ```
 
-Stop all services:
+To stop the services:
 
 ```bash
 docker compose down
 ```
+
+> The monitoring agent can be run separately on the system that needs to be monitored.
 
 ---
 
@@ -493,93 +500,113 @@ docker compose down
 | Online / Offline Detection  | ✅         |
 | Real-Time Updates           | ✅         |
 | Historical Metrics          | ✅         |
-| Threshold Alerts            | ✅         |
+| Threshold-Based Alerts      | ✅         |
 | PostgreSQL Storage          | ✅         |
 
 ---
 
 # 🔐 Environment Variables
 
-Create `.env` files based on the provided `.env.example` files.
+Create `.env` files using the provided `.env.example` files.
 
-Example configuration:
+Keep environment-specific credentials and configuration values outside the repository.
+
+Example:
 
 ```env
-PORT=5000
-
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=syntra
-DB_USER=postgres
-DB_PASSWORD=your_password
+PORT=8000
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/syntra
 ```
 
-> ⚠️ Never commit your `.env` files or database credentials to GitHub.
+For the monitoring agent, configure the backend connection and system-specific settings according to `agent/.env.example`.
+
+> ⚠️ **Never commit `.env` files, passwords, API keys, or other sensitive credentials to GitHub.**
 
 ---
 
 # 🎯 Project Goals
 
-Syntra was built to explore and implement concepts related to:
+Syntra was built to explore and implement practical concepts related to:
 
 * Distributed Systems
 * Observability
 * Real-Time Systems
 * Agent-Based Architecture
+* REST APIs
 * WebSockets
 * Infrastructure Monitoring
 * Docker Monitoring
 * System Metrics Collection
 * Data Visualization
+* PostgreSQL
 * Containerization
 
 ---
 
-# 🔮 Roadmap
+# ✅ Project Status
 
-## ✅ Version 0 — Completed
+The core implementation of **Syntra is complete**.
 
-The initial version of Syntra includes:
+The project successfully implements the planned monitoring workflow, including system metric collection, Docker monitoring, backend processing, persistent storage, real-time communication, alerts, and a centralized React dashboard.
+
+### Implemented Capabilities
 
 * [x] Host System Monitoring
+* [x] CPU and Memory Monitoring
+* [x] System Uptime Monitoring
+* [x] Online / Offline Detection
 * [x] Docker Container Monitoring
+* [x] Container CPU and Memory Metrics
 * [x] Real-Time Dashboard
 * [x] Socket.IO Communication
 * [x] PostgreSQL Storage
-* [x] Threshold-Based Alerts
 * [x] Historical Metrics
+* [x] Threshold-Based Alerts
 * [x] Multi-System Monitoring
-* [x] Docker Support
+* [x] REST API-Based Communication
+* [x] Agent-Based Monitoring Architecture
+* [x] Docker and Docker Compose Support
+* [x] Interactive React Dashboard
+
+> **Project Status:** Completed implementation for the current project scope.
 
 ---
 
-## 🚧 Version 1 — In Progress
+# 🔮 Future Enhancements
 
-Planned improvements:
+Although the current implementation is complete, Syntra can be extended in the future to support larger-scale and production-oriented observability requirements.
 
-* [ ] Authentication & Authorization
-* [ ] Advanced Alert Notifications
-* [ ] Advanced Analytics and monitoring dashboards
-* [ ] Cloud Deployment
-* [ ] Improved Scalability
+Potential enhancements include:
 
+* 🔐 **Authentication & Authorization** — secure access control for monitoring dashboards and APIs.
+* 🔔 **Advanced Alert Notifications** — email, webhook, or other notification channels for critical alerts.
+* 📊 **Advanced Analytics** — deeper metric analysis, performance trends, and customizable dashboards.
+* ☁️ **Cloud Deployment** — deployment on cloud infrastructure for remote and centralized monitoring.
+* ☸️ **Kubernetes Monitoring** — monitoring Kubernetes clusters, nodes, pods, and workloads.
+* 📈 **Improved Scalability** — optimizing the platform for a larger number of monitored systems and higher metric volumes.
+* 🧩 **Extended Infrastructure Monitoring** — support for additional infrastructure components and services.
+
+These are **potential future enhancements**, not unfinished components of the current implementation.
 
 ---
 
 # 💡 Future Vision
-While Syntra currently focuses on real-time host system and Docker container monitoring, the platform can be extended in the future to support additional infrastructure and observability capabilities:
 
+Syntra can evolve from host and Docker monitoring into a broader infrastructure observability platform:
+
+```text
 🖥️ Host Systems
-      ↓
+        ↓
 🐳 Docker Containers
-      ↓
-☸️ Kubernetes Monitoring
-      ↓
+        ↓
+☸️ Kubernetes
+        ↓
 ☁️ Cloud Infrastructure
-      ↓
+        ↓
 📊 Centralized Observability
+```
 
-Potential enhancements could include advanced alerting, authentication, and support for larger-scale infrastructure monitoring.
+The long-term vision is to provide a centralized platform capable of collecting, processing, analyzing, and visualizing infrastructure health and performance across different environments.
 
 ---
 
@@ -587,10 +614,11 @@ Potential enhancements could include advanced alerting, authentication, and supp
 
 Contributions, ideas, and improvements are welcome.
 
-Feel free to:
+You can:
 
 * Fork the repository
 * Create a feature branch
+* Make your changes
 * Submit a pull request
 * Open an issue
 
@@ -598,7 +626,7 @@ Feel free to:
 
 # 📄 License
 
-This project is currently developed for learning, experimentation, and portfolio purposes.
+This project is developed for educational, learning, experimentation, and portfolio purposes.
 
 ---
 
@@ -612,14 +640,15 @@ This project is currently developed for learning, experimentation, and portfolio
 
 ### 👨‍💻 Developed by Sujal Singh
 
-**B.Tech CSE (Hons.) — AI & Analytics**
+**B.Tech Hons — CSE with AI & Analytics**
 
-🔗 GitHub: https://github.com/SujalSingh9252
+🔗 GitHub: [SujalSingh9252](https://github.com/SujalSingh9252)
 
 ---
 
 **Syntra — Monitor. Observe. Analyze. React. ⚡**
 
 </div>
+
 
 
