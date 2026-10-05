@@ -216,7 +216,7 @@ function App() {
       <div className="dashboard-shell">
         <div className="hero-card">
           <div className="hero-left">
-            <div className="hero-pill">Sentra Observability</div>
+            <div className="hero-pill">Syntra Observability</div>
             <h1>System Monitoring Dashboard</h1>
             <p>
               Track system health, alerts, resource usage, and container-level
